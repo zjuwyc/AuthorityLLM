@@ -13,15 +13,7 @@ def make_regression_k_list():
 
 
 def dense_regression_probe(exp_cfg, activation_dataset, regression_target):
-    """
-    Train a dense probe on the activation dataset.
-
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    regression_target : np.ndarray (n_samples) with regression targets.
-    """
+    
     X_train, X_test, y_train, y_test = train_test_split(
         activation_dataset, regression_target,
         test_size=exp_cfg.test_set_frac, random_state=exp_cfg.seed)
@@ -41,15 +33,7 @@ def dense_regression_probe(exp_cfg, activation_dataset, regression_target):
 
 
 def heuristic_sparse_regression_sweep(exp_cfg, activation_dataset, regression_target):
-    """
-    Train a heuristic sparse probe on the activation dataset for varying k.
-
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    regression_target : np.ndarray (n_samples) with regression targets.
-    """
+    
     X_train, X_test, y_train, y_test = train_test_split(
         activation_dataset, regression_target,
         test_size=exp_cfg.test_set_frac, random_state=exp_cfg.seed)
@@ -81,13 +65,5 @@ def heuristic_sparse_regression_sweep(exp_cfg, activation_dataset, regression_ta
 
 
 def optimal_sparse_regression_probe(exp_cfg, activation_dataset, regression_target):
-    """
-    Train a sparse probe on the activation dataset.
-
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    regression_target : np.ndarray (n_samples) with regression targets.
-    """
+    
     raise NotImplementedError
