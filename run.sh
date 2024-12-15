@@ -23,46 +23,28 @@ sleep 0.1  # wait for paths to update
 # activate environment and load modules
 source $SPARSE_PROBING_ROOT/sparprob/bin/activate
 source /etc/profile
-module load gurobi/gurobi-951
+module load chatglm-6b
 
 
-PYTHIA_MODELS=('chatglm-6b')
+FEATUR_DATASET=('cb','copa','wic','wsc','wng')
 
 # Text features sweep across all models
-for model in "${PYTHIA_MODELS[@]}"
+for feature_dataset in "${FEATUR_DATASET[@]}"
 do
-    python probing_experiment.py \
-        --experiment_name code_lang_max_test \
-        --experiment_type heuristic_sparsity_sweep\
-        --model "$model" \
-        --feature_dataset programming_lang_id.pyth.512.-1 \
+    python training.py \
+        --model "chatglm-6b" \
+        --feature_dataset "$feature_dataset" \
         --activation_aggregation max
 done
 
 
-for model in "${PYTHIA_MODELS[@]}"
+for feature_dataset in "${FEATUR_DATASET[@]}"
 do
-    python probing_experiment.py \
-        --experiment_name nat_lang_test \
-        --experiment_type heuristic_sparsity_sweep\
-        --model "$model" \
-        --feature_dataset natural_lang_id.pyth.512.-1
+    python training.py \
+        --model "chatglm-6b" \
+        --feature_dataset "$feature_dataset" \
 done
 
 
 
-# python probing_experiment.py \
-#     --experiment_name language_id_test \
-#     --experiment_type heuristic_sparsity_sweep\
-#     --model pythia-19m \
-#     --feature_dataset github_lang_id.test.pyth.512.-1.True
-#     --average_seq_activations
 
-
-# python probing_experiment.py \
-#  --experiment_name heuristic_feature_selection_test \
-#  --experiment_type test_heuristic_filtering \
-#  --feature_datasets true_binary_token_supervised_feature_datasets \
-#  --n_seqs 1000 \
-#  --osp_upto_k 12 \
-#  --gurobi_timeout 600
