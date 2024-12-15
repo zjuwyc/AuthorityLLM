@@ -38,15 +38,7 @@ def split_and_preprocess(exp_cfg, activation_dataset, feature_labels):
 
 
 def dense_probe(exp_cfg, activation_dataset, feature_labels):
-    """
-    Train a dense probe on the activation dataset.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -70,16 +62,7 @@ def dense_probe(exp_cfg, activation_dataset, feature_labels):
 
 
 def enumerate_monosemantic(exp_cfg, activation_dataset, feature_labels, top_k=30):
-    """
-    Test the classification performance of the top 30 neurons as ordered by
-    their f_statistic (ratio of class variances).
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -110,15 +93,7 @@ def enumerate_monosemantic(exp_cfg, activation_dataset, feature_labels, top_k=30
 
 
 def osp_tuning(exp_cfg, activation_dataset, feature_labels):
-    """
-    Hyperparameter tuning for the optimal sparse probe.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, _, _, _ = train_test_split(
         activation_dataset, feature_labels,
         test_size=0.8, random_state=exp_cfg.seed)
@@ -138,16 +113,7 @@ def osp_tuning(exp_cfg, activation_dataset, feature_labels):
 
 
 def optimal_sparse_probing(exp_cfg, activation_dataset, feature_labels, regularization=None):
-    """
-    Train an optimal sparse probe for various values of k (use telescoping for warm starts).
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    regularization : float, optional defaults to 1/n**0.5
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -215,16 +181,7 @@ def optimal_sparse_probing(exp_cfg, activation_dataset, feature_labels, regulari
 
 
 def osp_iterative_pruning(exp_cfg, activation_dataset, feature_labels, regularization=None):
-    """
-    Iteratively prune features from optimal sparse probe to test ensemble vs. superposition.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    regularization : float, optional defaults to 10/n
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -319,15 +276,7 @@ def osp_iterative_pruning(exp_cfg, activation_dataset, feature_labels, regulariz
 
 
 def heuristic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels):
-    """
-    Train a heuristic sparse probe for various values of k.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -365,15 +314,7 @@ def heuristic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels):
 
 
 def fast_heuristic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels):
-    """
-    Train a heuristic sparse probe based on f_statistic for smaller values of k.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -412,18 +353,7 @@ def fast_heuristic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels):
 
 
 def telescopic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels, reg=-1, l1_ratio=-1):
-    """
-    Train a telescopic probe for various values of k.
 
-    That is, use a cheap heuristic to select the max_k neurons, then use
-    a more expensive heuristic to select the best k of those in descending order.
-
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -473,15 +403,7 @@ def telescopic_sparsity_sweep(exp_cfg, activation_dataset, feature_labels, reg=-
 
 
 def tune_telescoping_sparsity_sweep(exp_cfg, activation_dataset, feature_labels):
-    """
-    Tune the regularization parameter for a telescopic probe.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     ratios = np.linspace(0.1, 0.9, 5)
     regs = np.logspace(-2, 2, 5)
     tune_results = {}
@@ -494,15 +416,6 @@ def tune_telescoping_sparsity_sweep(exp_cfg, activation_dataset, feature_labels)
 
 
 def rotation_baseline(exp_cfg, activation_dataset, feature_labels):
-    """
-    Train a logistic regression model on the rotated activations.
-
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
 
     n, d_act = activation_dataset.shape
 
@@ -539,15 +452,7 @@ def rotation_baseline(exp_cfg, activation_dataset, feature_labels):
 
 
 def rotation_baseline_dxd(exp_cfg, activation_dataset, feature_labels, n_trials=5):
-    """
-    Train a logistic regression model on the rotated activations.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     _, d = activation_dataset.shape
     results = {}
     for i in range(n_trials):
@@ -560,15 +465,7 @@ def rotation_baseline_dxd(exp_cfg, activation_dataset, feature_labels, n_trials=
 
 
 def iterative_pruning_rotation_baseline_dxd(exp_cfg, activation_dataset, feature_labels, top_k=100, n_trials=5):
-    """
-    Train a logistic regression model on the rotated activations.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
@@ -633,15 +530,7 @@ def iterative_pruning_rotation_baseline_dxd(exp_cfg, activation_dataset, feature
 
 
 def test_osp_heuristic_filtering(exp_cfg, activation_dataset, feature_labels):
-    """
-    Test performance of OSP with different heuristic filtering strategies.
 
-    Parameters
-    ----------
-    exp_cfg : as specified by the CLI in probing_experiment.py
-    activation_dataset : np.ndarray (n_samples, n_neurons)
-    feature_labels : np.ndarray (n_samples) with labels -1 or +1.
-    """
     X_train, X_test, y_train, y_test = split_and_preprocess(
         exp_cfg, activation_dataset, feature_labels)
 
