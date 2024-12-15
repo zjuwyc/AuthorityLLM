@@ -26,7 +26,7 @@ source /etc/profile
 module load gurobi/gurobi-951
 
 
-PYTHIA_MODELS=('pythia-19m' 'pythia-125m' 'pythia-350m' 'pythia-800m' 'pythia-1.3b')
+PYTHIA_MODELS=('chatglm-6b')
 
 # Text features sweep across all models
 for model in "${PYTHIA_MODELS[@]}"
