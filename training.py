@@ -78,7 +78,6 @@ def get_skip_features(exp_cfg, feature_names):
 
 
 def run_probe_on_layer(exp_cfg, tokenized_dataset, feature_datasets, layer):
-    # TODO: add option to compute activations on the fly
     activation_dataset = load_activation_probing_dataset(exp_cfg, layer)
     index_mask = make_index_mask(exp_cfg, tokenized_dataset, feature_datasets)
 
