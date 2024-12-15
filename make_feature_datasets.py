@@ -20,24 +20,6 @@ from config import *
 from load import *
 
 
-GITHUB_DATASET_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'the_pile', 'github', 'github_lang_id.hf')
-EUROPARL_DATASET_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'the_pile', 'europarl.hf')
-PILE_SUBSET_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'NeelNanda/pile-10k', 'train')
-COUNTERFACT_DATASET_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'NeelNanda/counterfact-tracing', 'train')
-PILE_EVEN_SPLITS_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'test_subset_with_even_slices.hf')
-#PILE_TEST_PATH = os.path.join(
-#    os.environ['HF_DATASETS_CACHE'], 'pile-test.hf')
-PILE_TEST_PATH = '/home/gridsan/groups/maia_mechint/datasets/pile-test.hf'
-PREPROCESSED_EWT_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'preprocessed_ewt_512.hf')
-WIKIDATA_TABLE_PATH = '/home/gridsan/groups/maia_mechint/datasets/wikidata/wikidata_pile_test_1000000.csv'
-ARXIV_SUBSET_PATH = os.path.join(
-    os.environ['HF_DATASETS_CACHE'], 'arxiv_dataset.hf')
 
 
 TEXT_FEATURES = {
@@ -54,45 +36,33 @@ def prepare_feature_dataset(exp_cfg):
             feature_collection, TEXT_FEATURES[feature_collection])
         tokenized_dataset, feature_datasets = ptfd.prepare_dataset(exp_cfg)
 
-    elif feature_collection == 'programming_lang_id':
+    elif feature_collection == 'cb':
         plfd = language_id.LanguageIDFeatureDataset(
             'programming_lang_id', language_id.CODE_LANGS)
         tokenized_dataset, feature_datasets = plfd.prepare_dataset(exp_cfg)
 
-    elif feature_collection == 'natural_lang_id':
+    elif feature_collection == 'copa':
         nlfd = language_id.LanguageIDFeatureDataset(
             'natural_lang_id', language_id.TOP_NATURAL_LANGS)
         tokenized_dataset, feature_datasets = nlfd.prepare_dataset(exp_cfg)
 
-    elif feature_collection == 'distribution_id':
+    elif feature_collection == 'wic':
         ddfd = distribution_id.DataDistributionIDFeatureDataset(
             'distribution_id', distribution_id.DATASET_SPLITS)
         tokenized_dataset, feature_datasets = ddfd.prepare_dataset(exp_cfg)
 
-    elif feature_collection == 'compound_words':
+    elif feature_collection == 'wng':
         cwfd = ngrams.BigramFeatureDataset(
             'compound_words', ngrams.COMPOUND_WORDS)
         tokenized_dataset, feature_datasets = cwfd.prepare_dataset(exp_cfg)
 
-    elif feature_collection == 'counterfact':
+    elif feature_collection == 'wsc':
         cffd = counterfact.CounterfactFeatureDataset()
         tokenized_dataset, feature_datasets = cffd.prepare_dataset(exp_cfg)
 
     elif feature_collection == 'ewt':
         ewtds = ewt.LinguisticFeatureDataset('ewt')
         tokenized_dataset, feature_datasets = ewtds.prepare_dataset(exp_cfg)
-
-    elif 'wikidata' in feature_collection:  # store more information in the dataset type
-        wdfd = wikidata.WikidataFeatureDataset()
-        tokenized_dataset, feature_datasets = wdfd.prepare_dataset(exp_cfg)
-
-    elif feature_collection == 'position':
-        pds = position.PositionFeatureDataset()
-        tokenized_dataset, feature_datasets = pds.prepare_dataset(exp_cfg)
-
-    elif feature_collection == 'latex':
-        lfd = latex.LatexFeatureDataset()
-        tokenized_dataset, feature_datasets = lfd.prepare_dataset(exp_cfg)
 
     else:
         raise ValueError('Invalid feature_dataset type')
